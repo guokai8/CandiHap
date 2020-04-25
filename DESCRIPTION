@@ -17,6 +17,7 @@ Imports:
     BiocGenerics,
     IRanges,
     ggpubr,
+    tidyr,
     broom,
     GenomicRanges,
     Biostrings,

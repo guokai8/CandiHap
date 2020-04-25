@@ -105,8 +105,20 @@ expandRange = function(gr, upstream=1000, downstream=1000) {
     colnames(gr)[10:ncol(gr)] <- names
     GRanges(gr)
 }
-
-.aov.pheno.test <- function(haps, gene, feature){
+#' @title anova test for phenotype based on haplotype
+#' @importFrom stats aov na.omit TukeyHSD
+#' @importFrom dplyr left_join
+#' @importFrom broom tidy
+#' @importFrom magrittr %>%
+#' @importFrom scales scientific
+#' @importFrom tidyr separate
+#' @param haps SeqHap object
+#' @param gene gene name
+#' @param feature pheaotype name
+#' @export
+#' @author Kai Guo
+#'
+aov.pheno.test <- function(haps, gene, feature){
     haps <- hap@haplotype[[gene]]
     pheno <- hap@pheno[,c("sample",feature)]
     pheno <- na.omit(pheno)

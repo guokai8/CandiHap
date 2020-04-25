@@ -121,6 +121,7 @@ snplot <- function(hap, gene, hapname = NULL, layout = "lolliplot",
 #' @title boxplot for haplotype testing based on phenotype
 #' @importFrom dplyr left_join
 #' @importFrom dplyr mutate
+#' @importFrom stats aov na.omit TukeyHSD
 #' @importFrom tidyr separate
 #' @importFrom broom tidy
 #' @importFrom VennDetail setcolor

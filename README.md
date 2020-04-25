@@ -1,4 +1,5 @@
 # CandiHap
+<a href="https://travis-ci.org/guokai8/CandiHap"><img src="https://travis-ci.org/guokai8/CandiHap.svg" alt="Build status"></a>
 
 ## Install
 ```

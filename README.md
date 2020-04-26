@@ -8,7 +8,7 @@ install_github("guokai8/CandiHap")
 ```
 ## Usage
 ```
-library(Candihap)
+library(CandiHap)
 data(snp)
 gff <- snp$gff
 # gff <- importGFF("test.gff3",format="gff3")

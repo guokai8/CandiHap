@@ -171,12 +171,10 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 #' @export
 #' @return SeqHap object
 #' @author Kai Guo
-snp2hap <- function(file, grob){
+snp2hap <- function(pheno=NULL,file=NULL, grob){
     gr <-grob@overlap
-    if(file.exists(file)){
+    if(!is.null(file) & is.null(pheno)){
         pheno <- read_delim(file, delim = '\t')
-    }else{
-        pheno <- file
     }
     colnames(pheno)[1] <- 'sample'
     sequence <- lapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]))

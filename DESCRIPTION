@@ -27,7 +27,7 @@ Imports:
     grid,
     readr,
     rtracklayer
-Depends:
+Depends: R (>= 3.5.0)
 Suggests:
     knitr,
     testthat,

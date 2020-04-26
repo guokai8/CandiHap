@@ -166,16 +166,13 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 #' @importFrom haplotypes as.DNAbin
 #' @importFrom Biostrings DNAStringSet
 #' @importFrom GenomicRanges GRangesList
-#' @param file phenotype file
+#' @param pheno phenotype data
 #' @param grob GRanges of overlap results
 #' @export
 #' @return SeqHap object
 #' @author Kai Guo
-snp2hap <- function(pheno=NULL,file=NULL, grob){
+snp2hap <- function(pheno,grob){
     gr <-grob@overlap
-    if(!is.null(file) & is.null(pheno)){
-        pheno <- read_delim(file, delim = '\t')
-    }
     colnames(pheno)[1] <- 'sample'
     sequence <- lapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]))
     sequence <- lapply(sequence, function(x)

@@ -161,6 +161,20 @@ setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
     return(res)
 })
 
+#' @title read hmp files and combine snp together
+#' @importFrom readr read_delim
+#' @param file the name of the file which the data are to be read from.
+#' @param sep the field separator character.
+#' @param comment character: a character vector of length one containing a
+#' single character or an empty string.
+#' @return data.frame
+#' @author Kai Guo
+#' @export
+read.pheno <- function(file, sep = "\t"){
+    pheno <- read_delim(file, delim = sep)
+    colnames(pheno)[1] <- 'sample'
+    pheno
+}
 
 
 

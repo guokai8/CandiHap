@@ -175,6 +175,8 @@ snp2hap <- function(file, grob){
     gr <-grob@overlap
     if(file.exists(file)){
         pheno <- read_delim(file, delim = '\t')
+    }else{
+        pheno <- file
     }
     colnames(pheno)[1] <- 'sample'
     sequence <- lapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]))

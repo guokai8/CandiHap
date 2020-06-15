@@ -15,7 +15,7 @@
 #' @param angle a numeric indicate the angle for the labels
 #' @param side use both top and bottom to display the SNP (TRUE/FALSE)
 #' @param type character. Could be circle, pie, pin, pie.stack or flag.
-#' @param rescale Recalse the x-axis or not.
+#' @param rescale rescale the x-axis or not.
 #' @param snp.alpha alpha value for color
 #' @param jitter jitter the position of nodes or labels.
 #' @param random use random height to display SNP or not
@@ -169,6 +169,77 @@ snboxplot <- function(hap, gene, feature){
         theme(axis.text.x=element_text(angle=90))+
     stat_pvalue_manual(ptest,label = "p={adj.p.value}",y.position = y.position)
     print(p)
+}
+#'
+#' plot haplotype with network
+#' @importFrom pegas as.igraph.haploNet
+#' @importFrom igraph E
+#' @importFrom igraph E<-
+#' @importFrom igraph V
+#' @importFrom igraph V<-
+#' @importFrom GGally ggnet2
+#' @importFrom magrittr %>%
+#' @importFrom ggrepel geom_text_repel
+#' @importFrom dplyr group_by summarise
+#' @importFrom tidyr gather_
+#' @export
+hapnet <- function(hap, gene, feature = NULL, freq = TRUE,
+                   cex=1, altlinks=FALSE,high="red",low="skyblue",log=TRUE,
+                   edge.label.size = 3,node.label.size=4,
+                   node.alpha=0.75,...){
+    hapnet <- hap@hapnet[[gene]]
+  #  happ <- hap@hap[[gene]]
+    hapnames <- hap@hapnames[[gene]]
+    haplist <- hap@haplist[[gene]]
+    pheno <- hap@pheno
+    colnames(pheno)[1]<-"sample"
+    attr(hapnet,"labels") <- hapnames
+#    if(isTRUE(default)){
+#        if(isTRUE(altlinks)){
+#            par(mar=c(1,1,1,1))
+#            plot(hapnet,cex=cex,...)
+#        }else{
+#            par(mar=c(1,1,1,1))
+#            plot(hapnet,cex=cex,threshold=0,...)
+#        }
+ #   }else{
+    alter <- attr(hapnet,"alter.links")
+    #get links weight
+    links <- as.data.frame(hapnet[,1:4])
+    freq <- attr(hapnet,"freq")
+    names(freq)<-hapnames
+    g <- as.igraph.haploNet(hapnet,altlinks = altlinks)
+    if(isTRUE(altlinks)){
+        links <- rbind(links,alter)
+    }
+    E(g)$label<-links$step
+    cols <- .color_scale(low, high)
+    if(isTRUE(freq)){
+        px <- freq
+    }else{
+       if(!is.null(feature)){
+           pp <- pheno[, feature]
+       }else{
+           pp <- pheno
+       }
+           pp <- pp%>%gather(id,val,-sample)%>%
+               group_by(sample)%>%summarise(mu=mean(val,na.rm=T))
+           pp <- as.data.frame(pp)
+           rownames(pp)<-pp$sample
+           px <- unlist(lapply(haplist, function(x)mean(pp[x,"mu"],na.rm=T)))
+           px[is.na(px)] <- 1E-10
+    }
+    px <- px[V(g)$name]
+    if(isTRUE(log)){
+        size <- log2(freq[V(g)$name])
+    }
+    V(g)$size <- size
+    V(g)$color <- cols[sapply(px, .getIdx, min(px), max(px))]
+    ggnet2(g,edge.label = E(g)$label,node.size = V(g)$size,
+           legend.position = "none",
+           node.color = V(g)$color,node.alpha = node.alpha)+
+    geom_text_repel(label=V(g)$name)
+#    }
 }
 
 

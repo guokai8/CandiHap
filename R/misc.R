@@ -176,6 +176,26 @@ read.pheno <- function(file, sep = "\t"){
     pheno
 }
 
+## get name
+#' @param name gene name
+#' @param x haplist
+#' @param y name
+.getlist <- function(name,x,y){
+    tx <- x[[name]]
+    names(tx) <- paste0("haplotype",1:length(tx))
+    ty <- y[[name]]
+    tmp <- lapply(tx,function(x)ty[x])
+    return(tmp)
+}
 
-
+###
+.color_scale <- function(c1="pink", c2="red") { #modified from DOSE
+    pal <- colorRampPalette(c(c1, c2))
+    colors <- pal(200)
+    return(colors)
+}
+.getIdx <- function(v, MIN, MAX) { #modified from DOSE
+    intervals <- seq(MIN, MAX, length.out=200)
+    max(which(intervals <= v))
+}
 

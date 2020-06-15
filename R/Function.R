@@ -161,9 +161,10 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 
 #' @title extract fasta from genotype file and find haplotype
 #' @importFrom readr read_delim
-#' @importFrom haplotypes haplotype
-#' @importFrom haplotypes as.dna
-#' @importFrom haplotypes as.DNAbin
+#' @importFrom pegas haplotype
+#' @importFrom muscle muscle
+#' @importFrom pegas haploNet
+#' @importFrom ape as.DNAbin
 #' @importFrom Biostrings DNAStringSet
 #' @importFrom GenomicRanges GRangesList
 #' @param pheno phenotype data
@@ -177,31 +178,34 @@ snp2hap <- function(pheno,grob){
     sequence <- lapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]))
     sequence <- lapply(sequence, function(x)
         DNAStringSet(.unlist.name(sapply(x,function(y)snp2fasta(y)))))
-    seqs <- lapply(sequence,function(x)
-        suppressMessages(haplotype(as.dna(haplotypes::as.DNAbin(x)))))
-    hapind <- lapply(seqs,function(x)names(x@uniquehapind))
-    hapnames <- lapply(seqs, function(x)names(x@haplist))
-    hapfreq <-lapply(seqs, function(x)x@freq)
-    haplist <- lapply(seqs, function(x) x@haplist)
-   #     do.call(rbind,lapply(x@haplist, function(x)paste0(x,collapse = ";"))))
+    seqname <- lapply(sequence,function(x)names(x))
+    ss <- lapply(sequence, function(x)as.DNAbin(muscle(x)))
+    haps <- lapply(ss,function(x)haplotype(x,strict=T))
+    hapind <- lapply(haps, function(x)unlist(lapply(attr(x,"index"),'[',1)))
+    hapind <- sapply(names(hapind), function(x)seqname[[x]][hapind[[x]]],simplify = F)
+    hapnames <- lapply(haps, function(x)paste0("haplotype",1:length(rownames(x))))
+    hapfreq <-lapply(haps, function(x)as.integer(summary(x)))
+    hapx <- lapply(haps, function(x)attr(x,"index"))
+    haplist <- sapply(names(hapx), function(x).getlist(x,hapx,seqname),simplify = F)
     hapgr <- sapply(names(hapind), function(x)
         unlist(gr[x][, c("REF","ALT","INFO", "Allele Frequency",hapind[[x]])],
                use.names = F))
     hap <- sapply(names(hapgr), function(x).colnames.mcol(hapgr[[x]],
                                     hapnames[[x]]))
     hap <- GRangesList(hap)
-    hapseqs <- lapply(seqs, function(x)x@sequence)
-    hapdist <- lapply(seqs, function(x)x@d)
+    hapnet <- lapply(haps, function(x)haploNet(x))
+    #hapdist <- lapply(seqs, function(x)x@d)
     sequence <- sapply(names(hapind), function(x)
         sequence[[x]][hapind[[x]]])
     res <- new("SeqHap",
                gr = grob@gr,
                pheno = pheno,
                haplotype = hap,
+               hap = haps,
                seqs = sequence,
                hapnames = hapnames,
                hapfreq = hapfreq,
-               hapdist =hapdist,
+               hapnet = hapnet,
                haplist = haplist,
                upstream   = grob@upstream,
                downstream  = grob@downstream,

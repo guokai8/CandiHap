@@ -41,7 +41,7 @@ dandelion.plot)}
 
 \item{type}{character. Could be circle, pie, pin, pie.stack or flag.}
 
-\item{rescale}{Recalse the x-axis or not.}
+\item{rescale}{rescale the x-axis or not.}
 
 \item{snp.alpha}{alpha value for color}
 

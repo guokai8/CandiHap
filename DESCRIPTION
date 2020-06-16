@@ -21,6 +21,8 @@ Imports:
     ggpubr,
     tidyr,
     broom,
+    GGally,
+    igraph,
     GenomicRanges,
     Biostrings,
     trackViewer,

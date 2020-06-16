@@ -177,17 +177,18 @@ snboxplot <- function(hap, gene, feature){
 #' @importFrom igraph E<-
 #' @importFrom igraph V
 #' @importFrom igraph V<-
+#' @importFrom igraph graph.edgelist
 #' @importFrom GGally ggnet2
 #' @importFrom magrittr %>%
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom dplyr group_by summarise
-#' @importFrom tidyr gather_
+#' @importFrom tidyr gather
 #' @export
 hapnet <- function(hap, gene, feature = NULL, freq = TRUE,
                    cex=1, altlinks=FALSE,high="red",low="skyblue",log=TRUE,
                    edge.label.size = 3,node.label.size=4,
                    node.alpha=0.75,...){
-    require(igraph)
+  require(igraph)
     hapnet <- hap@hapnet[[gene]]
   #  happ <- hap@hap[[gene]]
     hapnames <- hap@hapnames[[gene]]
@@ -219,7 +220,7 @@ hapnet <- function(hap, gene, feature = NULL, freq = TRUE,
         px <- freq
     }else{
        if(!is.null(feature)){
-           pp <- pheno[, feature]
+           pp <- pheno[, c("sample",feature)]
        }else{
            pp <- pheno
        }

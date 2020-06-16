@@ -187,6 +187,7 @@ hapnet <- function(hap, gene, feature = NULL, freq = TRUE,
                    cex=1, altlinks=FALSE,high="red",low="skyblue",log=TRUE,
                    edge.label.size = 3,node.label.size=4,
                    node.alpha=0.75,...){
+    require(igraph)
     hapnet <- hap@hapnet[[gene]]
   #  happ <- hap@hap[[gene]]
     hapnames <- hap@hapnames[[gene]]

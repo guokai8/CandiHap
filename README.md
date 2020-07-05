@@ -25,6 +25,9 @@ snboxplot(hap,gene="Si9g49910",feature = "test")
 hapnet(hap,gene="Si9g49910",feature = "test")
 # plot gene track with snp
 dat=snp$dat
+# or read your data
+# notice that the dat should have the chromosome name in the first column, position in the second column and the values in the following columns 
+# dat <- read.dat(file,sep="\t")
 snptrack(gff,dat=dat,id="Parent")
 ## id is the gene name you want to display, in gff3 file should be 'Parent'
 #show snp locate in gene only

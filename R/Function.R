@@ -245,9 +245,12 @@ snp2fasta <- function(snp){
 #' @export
 read.data <- function(file, sep = "\t", comment = "&"){
     dat <- read_delim(file, delim = sep, comment = comment)
-    colnames(dat)[1]<-"seqnames"
-    dat$start <- dat$POS
-    dat$end <- dat$POS
-    dat <- makeGRangesFromDataFrame(dat,keep.extra.columns = T)
-    dat
+    dat <- as.data.frame(dat)
+    dd <- dat[,1,drop=F]
+    colnames(dd)[1]<-"seqnames"
+    dd$start <- dat[,2]
+    dd$end <- dat[,2]
+    dd <- cbind(dd,dat[,3:ncol(dat)])
+    dd <- makeGRangesFromDataFrame(dd,keep.extra.columns = T)
+    dd
 }

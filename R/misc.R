@@ -29,6 +29,7 @@ GFF2_COLNAMES<-c("source","type","phase",
 ### cory from GenomicFeatures
 GFF_FEATURE_TYPES <- c(.GENE_TYPES, .TX_TYPES, .EXON_TYPES,
                        .CDS_TYPES, .STOP_CODON_TYPES,.UTR_TYPES)
+GENE_FEATURE <- c(.EXON_TYPES,.CDS_TYPES,.UTR_TYPES,.STOP_CODON_TYPES)
 #' detect file format for import gff or gff3 file
 #' modified based on GenomicFeatures .detect_file_format function
 #' @importFrom tools file_ext
@@ -176,7 +177,7 @@ read.pheno <- function(file, sep = "\t"){
     pheno
 }
 
-## get name
+#' @title get name of list
 #' @param name gene name
 #' @param x haplist
 #' @param y name

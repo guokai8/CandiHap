@@ -4,7 +4,7 @@
 \alias{.getlist}
 \title{get name of list}
 \usage{
-.getlist(name, x, y)
+.getlist(name, x, y, hapname)
 }
 \arguments{
 \item{name}{gene name}

@@ -4,12 +4,14 @@
 \alias{snp2hap}
 \title{extract fasta from genotype file and find haplotype}
 \usage{
-snp2hap(pheno, grob)
+snp2hap(pheno, grob, hapname = "haplotype")
 }
 \arguments{
 \item{pheno}{phenotype data}
 
 \item{grob}{GRanges of overlap results}
+
+\item{hapname}{haplotype name}
 }
 \value{
 SeqHap object

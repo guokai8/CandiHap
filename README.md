@@ -19,6 +19,9 @@ ovl <- findover(gr,hmp)
 pheno <- snp$pheno
 # pheno <- read.pheno("Phenotype.txt",sep="\t")
 hap <- snp2hap(pheno,ovl)
+## want to extract results
+results(hap, gene="Si9g49910")
+# make figures
 snplot(hap,gene="Si9g49910",side=T)
 snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype3")
 snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype15",mutateOnly=TRUE)

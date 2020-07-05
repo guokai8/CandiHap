@@ -8,7 +8,6 @@ snptrack(
   obj,
   dat,
   id = "gene_id",
-  hmp = NULL,
   color = NULL,
   chr = NULL,
   region = NULL,

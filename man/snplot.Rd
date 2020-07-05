@@ -9,6 +9,7 @@ snplot(
   gene,
   hapname = NULL,
   layout = "lolliplot",
+  mutateOnly = FALSE,
   snp.colors = NULL,
   angle = 90,
   side = FALSE,
@@ -32,6 +33,8 @@ snplot(
 
 \item{layout}{a character to indiate layout method (lolliplot or
 dandelion.plot)}
+
+\item{mutateOnly}{only show the alt is different with the REF or not}
 
 \item{snp.colors}{color for the snp, random colors will be used if NULL}
 

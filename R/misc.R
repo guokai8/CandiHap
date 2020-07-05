@@ -157,7 +157,11 @@ setMethod("seqs", signature = (object="SeqHap"), function(object,gene=NULL){
 #' @export
 #' @author Kai Guo
 setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
-    res <- object@haplotype[[gene]]
+    if(!is.null(gengene)){
+        res <- object@haplotype[[gene]]
+    }else{
+        res <- unlist(object@haplotype)
+    }
     res <- as.data.frame(res)
     return(res)
 })

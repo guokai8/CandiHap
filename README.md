@@ -41,7 +41,7 @@ snptrack(gff,dat=dat,id="Parent",low='green',high='pink')
 #use r^2 stand for color
 snptrack(gff,dat=dat,id="Parent",color='r2')
 ## show some genes (bug)
-# snptrack(gff,dat=dat,gene='Si9g49910')
+snptrack(gff,dat=dat,id="Parent",gene='Si9g49910')
 #change name, etc ...
 ?snptrack
 ```

@@ -233,4 +233,21 @@ snp2fasta <- function(snp){
     snp
 }
 
-
+#' @title prepare GWAS data
+#' @importFrom readr read_delim
+#' @importFrom GenomicRanges makeGRangesFromDataFrame
+#' @param file the name of the file which the data are to be read from.
+#' @param sep the field separator character.
+#' @param comment character: a character vector of length one containing a
+#' single character or an empty string.
+#' @return GRanges
+#' @author Kai Guo
+#' @export
+read.data <- function(file, sep = "\t", comment = "&"){
+    dat <- read_delim(file, delim = sep, comment = comment)
+    colnames(dat)[1]<-"seqnames"
+    dat$start <- dat$POS
+    dat$end <- dat$POS
+    dat <- makeGRangesFromDataFrame(dat,keep.extra.columns = T)
+    dat
+}

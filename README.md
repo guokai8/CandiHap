@@ -23,4 +23,16 @@ snplot(hap,gene="Si9g49910",side=T)
 snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype3")
 snboxplot(hap,gene="Si9g49910",feature = "test")
 hapnet(hap,gene="Si9g49910",feature = "test")
+# plot gene track with snp
+snptrack(snp$gff,dat=snp$dat,id="Parent")
+#show snp locate in gene only
+snptrack(snp$gff,dat=snp$dat,id="Parent",geneOnly=T)
+# exon only
+snptrack(snp$gff,dat=snp$dat,id="Parent",exonOnly=T)
+#define different color
+snptrack(snp$gff,dat=snp$dat,id="Parent",low='green',high='pink')
+#use r^2 stand for color
+snptrack(snp$gff,dat=snp$dat,id="Parent",color='r2')
+#change name, etc ...
+?snptrack
 ```

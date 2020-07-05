@@ -157,7 +157,7 @@ setMethod("seqs", signature = (object="SeqHap"), function(object,gene=NULL){
 #' @export
 #' @author Kai Guo
 setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
-    if(!is.null(gengene)){
+    if(!is.null(gene)){
         res <- object@haplotype[[gene]]
     }else{
         res <- unlist(object@haplotype)
@@ -185,9 +185,10 @@ read.pheno <- function(file, sep = "\t"){
 #' @param name gene name
 #' @param x haplist
 #' @param y name
-.getlist <- function(name,x,y){
+#' @paeam hapname haplotype name
+.getlist <- function(name,x,y,hapname){
     tx <- x[[name]]
-    names(tx) <- paste0("haplotype",1:length(tx))
+    names(tx) <- paste0(hapname,1:length(tx))
     ty <- y[[name]]
     tmp <- lapply(tx,function(x)ty[x])
     return(tmp)

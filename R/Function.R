@@ -169,10 +169,11 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 #' @importFrom GenomicRanges GRangesList
 #' @param pheno phenotype data
 #' @param grob GRanges of overlap results
+#' @param hapname haplotype name
 #' @export
 #' @return SeqHap object
 #' @author Kai Guo
-snp2hap <- function(pheno,grob){
+snp2hap <- function(pheno,grob,hapname='haplotype'){
     gr <-grob@overlap
     colnames(pheno)[1] <- 'sample'
     sequence <- lapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]))
@@ -183,10 +184,10 @@ snp2hap <- function(pheno,grob){
     haps <- lapply(ss,function(x)haplotype(x,strict=T))
     hapind <- lapply(haps, function(x)unlist(lapply(attr(x,"index"),'[',1)))
     hapind <- sapply(names(hapind), function(x)seqname[[x]][hapind[[x]]],simplify = F)
-    hapnames <- lapply(haps, function(x)paste0("haplotype",1:length(rownames(x))))
+    hapnames <- lapply(haps, function(x)paste0(hapname,1:length(rownames(x))))
     hapfreq <-lapply(haps, function(x)as.integer(summary(x)))
     hapx <- lapply(haps, function(x)attr(x,"index"))
-    haplist <- sapply(names(hapx), function(x).getlist(x,hapx,seqname),simplify = F)
+    haplist <- sapply(names(hapx), function(x).getlist(x,hapx,seqname,hapname),simplify = F)
     hapgr <- sapply(names(hapind), function(x)
         unlist(gr[x][, c("REF","ALT","INFO", "Allele Frequency",hapind[[x]])],
                use.names = F))

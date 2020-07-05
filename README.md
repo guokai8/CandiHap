@@ -25,6 +25,7 @@ snboxplot(hap,gene="Si9g49910",feature = "test")
 hapnet(hap,gene="Si9g49910",feature = "test")
 # plot gene track with snp
 snptrack(snp$gff,dat=snp$dat,id="Parent")
+## id is the gene name you want to display, in gff3 file should be 'Parent'
 #show snp locate in gene only
 snptrack(snp$gff,dat=snp$dat,id="Parent",geneOnly=T)
 # exon only

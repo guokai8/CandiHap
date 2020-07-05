@@ -1,6 +1,6 @@
 # CandiHap
 <a href="https://travis-ci.org/guokai8/CandiHap"><img src="https://travis-ci.org/guokai8/CandiHap.svg" alt="Build status"></a>
-[![](https://img.shields.io/badge/devel%20version-0.0.9-green.svg)](https://github.com/guokai8/CandiHap)
+[![](https://img.shields.io/badge/devel%20version-0.0.10-green.svg)](https://github.com/guokai8/CandiHap)
 ## Install
 ```
 library(devtools)
@@ -21,6 +21,7 @@ pheno <- snp$pheno
 hap <- snp2hap(pheno,ovl)
 snplot(hap,gene="Si9g49910",side=T)
 snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype3")
+snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype15",mutateOnly=TRUE)
 ## want to know more
 ?snplot
 snboxplot(hap,gene="Si9g49910",feature = "test")

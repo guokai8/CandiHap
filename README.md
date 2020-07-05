@@ -24,16 +24,19 @@ snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype3")
 snboxplot(hap,gene="Si9g49910",feature = "test")
 hapnet(hap,gene="Si9g49910",feature = "test")
 # plot gene track with snp
-snptrack(snp$gff,dat=snp$dat,id="Parent")
+dat=snp$dat
+snptrack(gff,dat=dat,id="Parent")
 ## id is the gene name you want to display, in gff3 file should be 'Parent'
 #show snp locate in gene only
-snptrack(snp$gff,dat=snp$dat,id="Parent",geneOnly=T)
+snptrack(gff,dat=dat,id="Parent",geneOnly=T)
 # exon only
-snptrack(snp$gff,dat=snp$dat,id="Parent",exonOnly=T)
+snptrack(gff,dat=dat,id="Parent",exonOnly=T)
 #define different color
-snptrack(snp$gff,dat=snp$dat,id="Parent",low='green',high='pink')
+snptrack(gff,dat=dat,id="Parent",low='green',high='pink')
 #use r^2 stand for color
-snptrack(snp$gff,dat=snp$dat,id="Parent",color='r2')
+snptrack(gff,dat=dat,id="Parent",color='r2')
+## show some genes
+snptrack(gff,dat=dat,gene='Si9g49910')
 #change name, etc ...
 ?snptrack
 ```

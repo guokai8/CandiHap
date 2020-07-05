@@ -58,7 +58,7 @@
 #' @param arrow.fill arrow fill
 #' @export
 #' @author Kai Guo
-snptrack <- function(obj, dat, id = "gene_id", hmp=NULL, color=NULL, chr = NULL, region = NULL, gene = NULL,
+snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = NULL, gene = NULL,
                         geneOnly = FALSE, exonOnly = FALSE,
                         upstream = 1000, downstream = 1000, alpha.point =0.75, point.size = 1, point.shape = 20,
                         exon = "darkgreen", utr = "cyan4", intron = "black", gene.label.size = 0.5,

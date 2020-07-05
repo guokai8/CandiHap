@@ -200,3 +200,17 @@ read.pheno <- function(file, sep = "\t"){
     max(which(intervals <= v))
 }
 
+#' check if REF same as hap
+#' @importFrom magrittr %>%
+#' @importFrom dplyr mutate
+#' @importFrom GenomicRanges as.data.frame
+#' @importFrom GenomicRanges mcols
+#' @importFrom GenomicRanges `mcols<-`
+#' @param gr GRanges object
+.check_same_or_not <- function(gr){
+    gr <- mcols(gr)
+    gr <- as.data.frame(gr)
+    gr$alt <- sub('\\/.*','',gr[,2])
+    gr$cond <- gr$alt!=gr$REF
+    return(gr$cond)
+}

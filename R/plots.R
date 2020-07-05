@@ -11,6 +11,7 @@
 #' @param hapname haplotype want to display
 #' @param layout a character to indiate layout method (lolliplot or
 #' dandelion.plot)
+#' @param mutateOnly only show the alt is different with the REF or not
 #' @param snp.colors color for the snp, random colors will be used if NULL
 #' @param angle a numeric indicate the angle for the labels
 #' @param side use both top and bottom to display the SNP (TRUE/FALSE)
@@ -26,7 +27,8 @@
 #' @export
 #' @return figure
 #' @author Kai Guo
-snplot <- function(hap, gene, hapname = NULL, layout = "lolliplot",
+snplot <- function(hap, gene, hapname = NULL,layout = "lolliplot",
+                   mutateOnly = FALSE,
                    snp.colors = NULL, angle = 90, side = FALSE,
                    type="circle",rescale = FALSE,snp.alpha = 0.7,
                    jitter ="node",
@@ -55,6 +57,14 @@ snplot <- function(hap, gene, hapname = NULL, layout = "lolliplot",
         names(haps)<-paste(haps$REF,haps$ALT,sep="->")
     }else{
         haps <- hap@haplotype[[gene]][,c("REF",hapname)]
+        if(isTRUE(mutateOnly)){
+            snpx <- .check_same_or_not(haps)
+          if(sum(snpx)==0){
+              print('All ALT is same as REF')
+          }else{
+              haps <- haps[snpx,]
+          }
+        }
         names(haps)<-paste(haps$REF,sub('\\/.*','',mcols(haps)[,hapname]),sep="->")
     }
     if(isTRUE(side) & layout == "lolliplot"){

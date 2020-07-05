@@ -21,6 +21,8 @@ pheno <- snp$pheno
 hap <- snp2hap(pheno,ovl)
 snplot(hap,gene="Si9g49910",side=T)
 snplot(hap,gene="Si9g49910",side=T,random = F,hapname="haplotype3")
+## want to know more
+?snplot
 snboxplot(hap,gene="Si9g49910",feature = "test")
 hapnet(hap,gene="Si9g49910",feature = "test")
 # plot gene track with snp

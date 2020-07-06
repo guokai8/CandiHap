@@ -30,7 +30,8 @@ Imports:
     scales,
     grid,
     readr,
-    rtracklayer
+    rtracklayer,
+    VariantAnnotation
 Depends: R (>= 3.5.0)
 Suggests:
     knitr,

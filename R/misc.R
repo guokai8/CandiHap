@@ -219,3 +219,23 @@ read.pheno <- function(file, sep = "\t"){
     gr$cond <- gr$alt!=gr$REF
     return(gr$cond)
 }
+#' @title read vcf files
+#' @importFrom VariantAnnotation readVcfAsVRanges
+#' @importFrom VariantAnnotation ScanVcfParam
+#' @importFrom GenomicRanges makeGRangesFromDataFrame
+#' @importFrom S4Vectors elementMetadata
+#' @param file A ‘VcfFile’ (synonymous with ‘TabixFile’) instance or
+#' character() name of the VCF file to be processed. When ranges
+#' are specified in ‘param’, ‘file’ must be a ‘VcfFile’.
+#' @param genome A ‘character’ or ‘Seqinfo’ object.
+#' @param param param: An instance of ‘ScanVcfParam’, ‘GRanges’, ‘GRangesList’ or
+#' ‘IntegerRangesList’
+#' @export
+#' @return GRanges object
+#' @author Kai Guo
+read.vcf <- function(file,genome="hg19", param = ScanVcfParam()) {
+    vcf <- readVcfAsVRanges(file, genome, param=param)
+    vcf <- makeGRangesFromDataFrame(as.data.frame(vcf),keep.extra.columns=T)
+    names(elementMetadata(vcf))[1:2]<-c("REF","ALT")
+    vcf
+}

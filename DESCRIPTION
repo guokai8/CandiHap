@@ -1,7 +1,7 @@
 Package: CandiHap
 Type: Package
 Title: Build Haplotye and Generate Figures
-Version: 0.0.11
+Version: 0.0.12
 Author: Kai Guo, Xukai Li
 Maintainer: Kai Guo <guokai8@gmail.com>
 Description: build haplotye and generate figures
@@ -30,8 +30,7 @@ Imports:
     scales,
     grid,
     readr,
-    rtracklayer,
-    VariantAnnotation
+    rtracklayer
 Depends: R (>= 3.5.0)
 Suggests:
     knitr,

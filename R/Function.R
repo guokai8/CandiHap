@@ -180,7 +180,7 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
     sequence <- lapply(sequence, function(x)
         DNAStringSet(.unlist.name(sapply(x,function(y)snp2fasta(y)))))
     seqname <- lapply(sequence,function(x)names(x))
-    ss <- lapply(sequence, function(x)as.DNAbin(muscle(x)))
+    ss <- lapply(sequence, function(x)as.DNAbin(muscle(x,quiet=TRUE)))
     haps <- lapply(ss,function(x)haplotype(x,strict=T))
     hapind <- lapply(haps, function(x)unlist(lapply(attr(x,"index"),'[',1)))
     hapind <- sapply(names(hapind), function(x)seqname[[x]][hapind[[x]]],simplify = F)

@@ -1,6 +1,6 @@
 # CandiHap
 <a href="https://travis-ci.org/guokai8/CandiHap"><img src="https://travis-ci.org/guokai8/CandiHap.svg" alt="Build status"></a>
-[![](https://img.shields.io/badge/devel%20version-0.0.11-green.svg)](https://github.com/guokai8/CandiHap)
+[![](https://img.shields.io/badge/devel%20version-0.0.12-green.svg)](https://github.com/guokai8/CandiHap)
 ## Install
 ```
 library(devtools)
@@ -15,9 +15,11 @@ gff <- snp$gff
 gr<-preGranges(gff,gene="Si9g49910",cds = T)
 hmp <- snp$hmp
 ovl <- findover(gr,hmp)
-# hmp <- read.hmp("haplotypes.hmp")
+# hmp <- read_hmp("haplotypes.hmp")
+# or if you use vcf file
+# hmp <- read_vcf('test.vcf')
 pheno <- snp$pheno
-# pheno <- read.pheno("Phenotype.txt",sep="\t")
+# pheno <- read_pheno("Phenotype.txt",sep="\t")
 hap <- snp2hap(pheno,ovl)
 ## want to extract results
 results(hap, gene="Si9g49910")
@@ -33,7 +35,7 @@ hapnet(hap,gene="Si9g49910",feature = "test")
 dat=snp$dat
 # or read your data
 # notice that the dat should have the chromosome name in the first column, position in the second column and the values in the following columns 
-# dat <- read.data(file,sep="\t")
+# dat <- read_data(file,sep="\t")
 snptrack(gff,dat=dat,id="Parent")
 ## id is the gene name you want to display, in gff3 file should be 'Parent'
 #show snp locate in gene only

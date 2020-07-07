@@ -15,9 +15,9 @@ gff <- snp$gff
 gr<-preGranges(gff,gene="Si9g49910",cds = T)
 hmp <- snp$hmp
 ovl <- findover(gr,hmp)
-# hmp <- read_hmp("haplotypes.hmp")
+# hmp <- read.hmp("haplotypes.hmp")
 pheno <- snp$pheno
-# pheno <- read_pheno("Phenotype.txt",sep="\t")
+# pheno <- read.pheno("Phenotype.txt",sep="\t")
 hap <- snp2hap(pheno,ovl)
 ## want to extract results
 results(hap, gene="Si9g49910")
@@ -33,7 +33,7 @@ hapnet(hap,gene="Si9g49910",feature = "test")
 dat=snp$dat
 # or read your data
 # notice that the dat should have the chromosome name in the first column, position in the second column and the values in the following columns 
-# dat <- read_data(file,sep="\t")
+# dat <- read.data(file,sep="\t")
 snptrack(gff,dat=dat,id="Parent")
 ## id is the gene name you want to display, in gff3 file should be 'Parent'
 #show snp locate in gene only

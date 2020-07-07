@@ -12,6 +12,8 @@
 \item{x}{haplist}
 
 \item{y}{name}
+
+\item{hapname}{haplotype name}
 }
 \description{
 get name of list

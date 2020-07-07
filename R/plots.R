@@ -65,7 +65,7 @@ snplot <- function(hap, gene, hapname = NULL,layout = "lolliplot",
               haps <- haps[snpx,]
           }
         }
-        names(haps)<-paste(haps$REF,sub('\\/.*','',mcols(haps)[,hapname]),sep="->")
+        names(haps)<-paste(haps$REF,sub('[\\/\\|].*','',mcols(haps)[,hapname]),sep="->")
     }
     if(isTRUE(side) & layout == "lolliplot"){
         haps$SNPsideID <- sample(c("top", "bottom"),

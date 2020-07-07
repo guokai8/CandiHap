@@ -103,7 +103,7 @@ preGranges <- function(gr, gene = NULL, exon = TRUE, cds = FALSE,
 #' @return data.frame
 #' @author Kai Guo
 #' @export
-read.hmp <- function(file, sep = "\t", comment = "&"){
+read_hmp <- function(file, sep = "\t", comment = "&"){
     hmp <- read_delim(file, delim = sep, comment = comment)
     colnames(hmp)[1]<-"seqnames"
     hmp$start <- hmp$POS
@@ -180,7 +180,7 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
     sequence <- lapply(sequence, function(x)
         DNAStringSet(.unlist.name(sapply(x,function(y)snp2fasta(y)))))
     seqname <- lapply(sequence,function(x)names(x))
-    ss <- lapply(sequence, function(x)as.DNAbin(muscle(x,quiet=TRUE)))
+    ss <- lapply(sequence, function(x)as.DNAbin(muscle(x, quiet =TRUE)))
     haps <- lapply(ss,function(x)haplotype(x,strict=T))
     hapind <- lapply(haps, function(x)unlist(lapply(attr(x,"index"),'[',1)))
     hapind <- sapply(names(hapind), function(x)seqname[[x]][hapind[[x]]],simplify = F)
@@ -189,7 +189,7 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
     hapx <- lapply(haps, function(x)attr(x,"index"))
     haplist <- sapply(names(hapx), function(x).getlist(x,hapx,seqname,hapname),simplify = F)
     hapgr <- sapply(names(hapind), function(x)
-        unlist(gr[x][, c("REF","ALT","INFO", "Allele Frequency",hapind[[x]])],
+        unlist(gr[x][, c("REF","ALT", hapind[[x]])],
                use.names = F))
     hap <- sapply(names(hapgr), function(x).colnames.mcol(hapgr[[x]],
                                     hapnames[[x]]))
@@ -222,7 +222,7 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
 #' @return sequence file
 #' @author Kai Guo
 snp2fasta <- function(snp){
-    snp <- do.call(rbind,strsplit(snp, '\\/'))
+    snp <- do.call(rbind,strsplit(snp, '[\\/\\|]'))
     cond <- all.equal(paste0(snp[, 1], collapse = ""),
                     paste0(snp[, 2], collapse = ""))
     if(isTRUE(cond)){
@@ -244,7 +244,7 @@ snp2fasta <- function(snp){
 #' @return GRanges
 #' @author Kai Guo
 #' @export
-read.data <- function(file, sep = "\t", comment = "&"){
+read_data <- function(file, sep = "\t", comment = "&"){
     dat <- read_delim(file, delim = sep, comment = comment)
     dat <- as.data.frame(dat)
     dd <- dat[,1,drop=F]

@@ -98,13 +98,15 @@ expandRange = function(gr, upstream=1000, downstream=1000) {
 }
 #' change mcols data colnames
 #' @importFrom GenomicRanges GRanges
+#' @importFrom S4Vectors `elementMetadata<-`
+#' @importFrom S4Vectors elementMetadata
 #' @param gr GRanges object
 #' @param names new column names
 #' @author Kai Guo
 .colnames.mcol <- function(gr,names){
-    gr <- as.data.frame(gr)
-    colnames(gr)[10:ncol(gr)] <- names
-    GRanges(gr)
+    #### need to be change
+    names(elementMetadata(gr))[3:ncol(elementMetadata(gr))] <- names
+    gr
 }
 #' @title anova test for phenotype based on haplotype
 #' @importFrom stats aov na.omit TukeyHSD
@@ -175,7 +177,7 @@ setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
 #' @return data.frame
 #' @author Kai Guo
 #' @export
-read.pheno <- function(file, sep = "\t"){
+read_pheno <- function(file, sep = "\t"){
     pheno <- read_delim(file, delim = sep)
     colnames(pheno)[1] <- 'sample'
     pheno
@@ -185,7 +187,7 @@ read.pheno <- function(file, sep = "\t"){
 #' @param name gene name
 #' @param x haplist
 #' @param y name
-#' @paeam hapname haplotype name
+#' @param hapname haplotype name
 .getlist <- function(name,x,y,hapname){
     tx <- x[[name]]
     names(tx) <- paste0(hapname,1:length(tx))
@@ -215,27 +217,27 @@ read.pheno <- function(file, sep = "\t"){
 .check_same_or_not <- function(gr){
     gr <- mcols(gr)
     gr <- as.data.frame(gr)
-    gr$alt <- sub('\\/.*','',gr[,2])
+    gr$alt <- sub('[\\/\\|].*','',gr[,2])
     gr$cond <- gr$alt!=gr$REF
     return(gr$cond)
 }
 #' @title read vcf files
-#' @importFrom VariantAnnotation readVcfAsVRanges
-#' @importFrom VariantAnnotation ScanVcfParam
+#' @importFrom pegas read.vcf
+#' @importFrom pegas VCFloci
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
-#' @importFrom S4Vectors elementMetadata
+#' @importFrom GenomicRanges mcols
+#' @importFrom GenomicRanges `mcols<-`
 #' @param file A ‘VcfFile’ (synonymous with ‘TabixFile’) instance or
-#' character() name of the VCF file to be processed. When ranges
-#' are specified in ‘param’, ‘file’ must be a ‘VcfFile’.
-#' @param genome A ‘character’ or ‘Seqinfo’ object.
-#' @param param param: An instance of ‘ScanVcfParam’, ‘GRanges’, ‘GRangesList’ or
-#' ‘IntegerRangesList’
+#' character() name of the VCF file to be processed..
 #' @export
 #' @return GRanges object
 #' @author Kai Guo
-read.vcf <- function(file,genome="hg19", param = ScanVcfParam()) {
-    vcf <- readVcfAsVRanges(file, genome, param=param)
-    vcf <- makeGRangesFromDataFrame(as.data.frame(vcf),keep.extra.columns=T)
-    names(elementMetadata(vcf))[1:2]<-c("REF","ALT")
-    vcf
+read_vcf <- function(file) {
+    info <- VCFloci(file, quiet = TRUE)
+    snp <- makeGRangesFromDataFrame(info, start.field = 'POS',
+                end.field = 'POS', keep.extra.columns = TRUE)
+    snp <- snp[, c('REF', 'ALT')]
+    vcf <- read.vcf(file, from = 1,to = nrow(info), quiet = TRUE)
+    mcols(snp)<-cbind(mcols(snp), t(as.data.frame(vcf)))
+    snp
 }

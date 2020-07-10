@@ -135,7 +135,7 @@ aov.pheno.test <- function(haps, gene, feature){
     colnames(pheno)[2]<-"feature"
     ptest <- tidy(TukeyHSD(aov(feature~group,data=pheno)))%>%
         separate(comparison,c("group1","group2"),sep="-")
-    ptest$adj.p.value<-scientific(ptest$scientific,digits=2)
+    ptest$adj.p.value<-scientific(ptest$adj.p.value,digits=2)
     ptest
 }
 

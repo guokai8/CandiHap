@@ -87,6 +87,7 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     if(!(is.null(chr) & is.null(region))){
         gr <- GRanges(seqnames = chr, strand = "+", ranges = IRanges(start=region[1],end=region[2]))
         chr_r <- subsetByOverlaps(gr, chr_r)
+        track <- subsetByOverlaps(track, chr_r)
     }else{
         chr_r <- expandRange(chr_r, upstream = upstream,downstream = downstream)
     }

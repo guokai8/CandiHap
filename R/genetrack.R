@@ -48,7 +48,8 @@
 #' @param point.shape shape of the point
 #' @param exon exon color
 #' @param intron intron color
-#' @param utr utr color
+#' @param utr3 3'utr color
+#' @param utr5 5'utr color
 #' @param gene.label.size size of the gene label
 #' @param high legend color
 #' @param low low legend color
@@ -61,7 +62,7 @@
 snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = NULL, gene = NULL,
                         geneOnly = FALSE, exonOnly = FALSE,
                         upstream = 1000, downstream = 1000, alpha.point =0.75, point.size = 1, point.shape = 20,
-                        exon = "darkgreen", utr = "cyan4", intron = "black", gene.label.size = 0.5,
+                        exon = "darkgreen", utr3 = "cyan4", utr5 ="cyan4",intron = "black", gene.label.size = 0.5,
                         high = "cyan4", low ="lightblue", ylab="-log10 (P value)", legend.lab = NULL,
                         ylab.size = 0.9, arrow.col ="lightblue",arrow.fill = "lightblue"){
     #extrack object
@@ -221,23 +222,37 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
                     y = c(gene_y, gene_y),
                     gp = gpar(col = intron),
                     default.units = "native")
-
-            exons <- curr_trs[curr_trs$feature%in%c("CDS","exon")]
+            exons <- curr_trs[curr_trs$feature%in%.EXON_TYPES]
             ## plot exons by the feature type
             grid.rect(x = (start(exons) + end(exons))/2, y = gene_y,
                     width = width(exons),
-                    height = gene_h/ifelse(exons$feature %in% c("CDS", "exon"), 2, 4),
+                    height = gene_h/ifelse(exons$feature %in%.EXON_TYPES , 2, 4),
                     gp = gpar(col = NA, fill = exon),
                     default.units = "native")
-            utrs <- curr_trs[curr_trs$feature%in%c("utr3", "utr5",
-                            "five_prime_UTR", "three_prime_UTR")]
+            utrs3 <- curr_trs[curr_trs$feature%in%c("utr3", "three_prime_UTR")]
+            if(length(utrs3) > 0){
+                grid.rect(x = (start(utrs3) + end(utrs3))/2, y = gene_y,
+                    width = width(utrs3),
+                    height = gene_h/ifelse(utrs3$feature %in% c("utr3","three_prime_UTR"), 2, 4),
+                    gp=gpar(col = NA, fill = utr3),
+                    default.units = "native")
+            }
+            # utr5
+            utrs5 <- curr_trs[curr_trs$feature%in%c("utr5", "five_prime_UTR")]
+            if(length(utrs5) > 0){
+                grid.rect(x = (start(utrs5) + end(utrs5))/2, y = gene_y,
+                          width = width(utrs5),
+                          height = gene_h/ifelse(utrs5$feature %in% c("utr5", "five_prime_UTR"), 2, 4),
+                          gp=gpar(col = NA, fill = utr5),
+                          default.units = "native")
+            }
+            utrs <- curr_trs[curr_trs$feature%in%c("UTR")]
             if(length(utrs) > 0){
                 grid.rect(x = (start(utrs) + end(utrs))/2, y = gene_y,
-                    width = width(utrs),
-                    height = gene_h/ifelse(utrs$feature %in% c("utr3", "utr5",
-                            "five_prime_UTR","three_prime_UTR"), 2, 4),
-                    gp=gpar(col = NA, fill = utr),
-                    default.units = "native")
+                          width = width(utrs),
+                          height = gene_h/ifelse(utrs$feature %in% c("UTR"), 2, 4),
+                          gp=gpar(col = NA, fill = "cyan4"),
+                          default.units = "native")
             }
             ## plot direction at TSS
             stringW <- convertWidth(stringWidth(names(curr_rg)), unitTo = "native", valueOnly = TRUE)
@@ -312,8 +327,13 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     pushViewport(vp)
     vp3 <- viewport(x = unit(0.5, "npc"), y=unit(0.5, "npc"),height = unit(0.8, "npc"))
     pushViewport(vp3)
-    grid.legend(labels=c("UTR","Intron","Exon"),ncol=1,byrow=TRUE, vgap=unit(.3, "lines"),
-    hgap=unit(.3, "lines"), pch=22, gp=gpar(col="white", fill=c(utr,intron,exon)))
+    if(length(utrs) > 0){
+        grid.legend(labels=c("UTR","Intron","Exon"),ncol=1,byrow=TRUE, vgap=unit(.3, "lines"),
+                    hgap=unit(.3, "lines"), pch=22, gp=gpar(col="white", fill=c("cyan4",intron,exon)))
+    }else{
+        grid.legend(labels=c("5'-UTR","3'-UTR","Intron","Exon"),ncol=1,byrow=TRUE, vgap=unit(.3, "lines"),
+                    hgap=unit(.3, "lines"), pch=22, gp=gpar(col="white", fill=c(utr5,utr3,intron,exon)))
+    }
     popViewport()
     popViewport()
     grid.clip()

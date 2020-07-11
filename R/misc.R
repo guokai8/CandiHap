@@ -156,6 +156,7 @@ setMethod("seqs", signature = (object="SeqHap"), function(object,gene=NULL){
 #' @param object SeqHap object
 #' @param gene gene
 #' @importFrom GenomicRanges as.data.frame
+#' @importFrom BiocGenerics unlist
 #' @export
 #' @author Kai Guo
 setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
@@ -164,6 +165,7 @@ setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
     }else{
         res <- unlist(object@haplotype)
     }
+    # need to be changed
     res <- as.data.frame(res)
     return(res)
 })

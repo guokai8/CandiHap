@@ -81,6 +81,9 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     y <- 0.5
     ## whether only draw some genes
     if(!is.null(gene)){
+        if(length(gene)>1){
+            gene = paste(gene, collapse="|")
+        }
         track <- track[grepl(gene,track$featureID,ignore.case = T),]
     }
     chr_r <- range(track,ignore.strand=T)

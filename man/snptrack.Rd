@@ -20,7 +20,8 @@ snptrack(
   point.size = 1,
   point.shape = 20,
   exon = "darkgreen",
-  utr = "cyan4",
+  utr3 = "cyan4",
+  utr5 = "cyan4",
   intron = "black",
   gene.label.size = 0.5,
   high = "cyan4",
@@ -61,7 +62,9 @@ snptrack(
 
 \item{exon}{exon color}
 
-\item{utr}{utr color}
+\item{utr3}{3'utr color}
+
+\item{utr5}{5'utr color}
 
 \item{intron}{intron color}
 

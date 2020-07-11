@@ -157,16 +157,19 @@ setMethod("seqs", signature = (object="SeqHap"), function(object,gene=NULL){
 #' @param gene gene
 #' @importFrom GenomicRanges as.data.frame
 #' @importFrom BiocGenerics unlist
+#' @importFrom dplyr left_join
+#' @importFrom tibble rownames_to_column
 #' @export
 #' @author Kai Guo
 setMethod("results", signature = (object="SeqHap"), function(object,gene=NULL){
-    if(!is.null(gene)){
-        res <- object@haplotype[[gene]]
-    }else{
-        res <- unlist(object@haplotype)
-    }
-    # need to be changed
+    res <- object@haplotype[[gene]]
     res <- as.data.frame(res)
+    haplist <- object@haplist[[gene]]
+    pheno <- object@pheno
+    hh <- data.frame(hp=rep(names(haplist),lapply(haplist,length)),sample=unlist(haplist),row.names = NULL)
+    hh <- merge(hh,object@pheno,by='sample')
+    res <- as.data.frame(t(res))%>%rownames_to_column(var='Info')%>%
+        left_join(hh,by=c('Info'='hp'))
     return(res)
 })
 

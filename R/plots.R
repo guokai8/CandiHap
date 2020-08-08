@@ -183,6 +183,7 @@ snboxplot <- function(hap, gene, feature){
 #'
 #' plot haplotype with network
 #' @importFrom pegas as.igraph.haploNet
+#' @importFrom pegas haploNet
 #' @importFrom igraph E
 #' @importFrom igraph E<-
 #' @importFrom igraph V
@@ -199,7 +200,9 @@ hapnet <- function(hap, gene, feature = NULL, freq = TRUE,
                    edge.label.size = 3,node.label.size=4,
                    node.alpha=0.75,...){
   require(igraph)
-    hapnet <- hap@hapnet[[gene]]
+  happ<-hap@hap[[gene]]
+  hapnet <- haploNet(happ)
+    #hapnet <- hap@hapnet[[gene]]
   #  happ <- hap@hap[[gene]]
     hapnames <- hap@hapnames[[gene]]
     haplist <- hap@haplist[[gene]]

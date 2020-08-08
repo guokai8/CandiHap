@@ -41,10 +41,13 @@ importGFF <- function(file,format=c("auto","gtf","gff3")){
 #' @importFrom magrittr %>%
 #' @importFrom GenomicRanges GRanges
 #' @importFrom GenomicRanges GRangesList
+#' @importFrom S4Vectors elementMetadata
 #' @importFrom rlang `!!`
 #' @importFrom rlang sym
 #' @param gr GRanges object
-#' @param gene gene name
+#' @param gene gene name (set to NULL if specify the chromosome name and region)
+#' @param chr chromosome name
+#' @param region a vector include the start and the end location
 #' @param exon a logical value indicating whether use exon information or not
 #' @param cds a logical value indicating whether use cds information or not
 #' @param gene_name a logical value indicating whether use
@@ -53,7 +56,7 @@ importGFF <- function(file,format=c("auto","gtf","gff3")){
 #' @return GRangesInfo object include only select genes information
 #' @export
 #' @author Kai Guo
-preGranges <- function(gr, gene = NULL, exon = TRUE, cds = FALSE,
+preGranges <- function(gr, gene = NULL,chr=NULL,region=NULL, exon = TRUE, cds = FALSE,
                        gene_name = FALSE,format = NULL)
     {
     #gr <- .importGFF(file, type = "auto")
@@ -81,6 +84,11 @@ preGranges <- function(gr, gene = NULL, exon = TRUE, cds = FALSE,
                   "start_codon","stop_codon")
     }
     cols <- intersect(cols,as.vector(gr$type))
+    if(!is.null(chr)&!is.null(region)){
+        gx <- GRanges(seqnames = chr, strand = "*", ranges = IRanges(start=region[1],end=region[2]))
+        chr_r <- subsetByOverlaps(gff, gx, ignore.strand=TRUE)
+        gene <- unique(sub('\\.\\d+','',unique(unlist(elementMetadata(chr_r)[,gene.col]))))
+    }
     gr <- sapply(gene, function(x)gr %>% as.data.frame() %>%
                      filter(grepl(!!x,!!sym(gene.col))) %>%
                      filter(type %in% cols)%>%GRanges())%>%GRangesList()
@@ -163,22 +171,25 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 #' @importFrom readr read_delim
 #' @importFrom pegas haplotype
 #' @importFrom muscle muscle
-#' @importFrom pegas haploNet
 #' @importFrom ape as.DNAbin
 #' @importFrom Biostrings DNAStringSet
 #' @importFrom GenomicRanges GRangesList
+#' @importFrom BiocParallel bplapply
+#' @importFrom BiocParallel MulticoreParam
 #' @param pheno phenotype data
 #' @param grob GRanges of overlap results
 #' @param hapname haplotype name
+#' @param cpus number of cores
 #' @export
 #' @return SeqHap object
 #' @author Kai Guo
-snp2hap <- function(pheno,grob,hapname='haplotype'){
+snp2hap <- function(pheno,grob,hapname='haplotype',cpus=1){
     gr <-grob@overlap
     colnames(pheno)[1] <- 'sample'
-    sequence <- lapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]))
-    sequence <- lapply(sequence, function(x)
-        DNAStringSet(.unlist.name(sapply(x,function(y)snp2fasta(y)))))
+    BPPARAM = MulticoreParam(cpus)
+    sequence <- bplapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]),BPPARAM=BPPARAM)
+    sequence <- bplapply(sequence, function(x)
+        DNAStringSet(.unlist.name(sapply(x,function(y)snp2fasta(y)))),BPPARAM=BPPARAM)
     seqname <- lapply(sequence,function(x)names(x))
     ### check the snp sequence length
     cond <- names(which(unlist(lapply(sequence, function(x)max(width(x))>5))))
@@ -186,11 +197,11 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
     if(length(sequence) == 0){
         stop("Gene got fewer snp !")
     }
-    ss <- lapply(sequence, function(x)as.DNAbin(muscle(x, quiet =TRUE)))
-    haps <- lapply(ss,function(x)haplotype(x,strict=T))
-    hapind <- lapply(haps, function(x)unlist(lapply(attr(x,"index"),'[',1)))
+    ss <- bplapply(sequence, function(x)as.DNAbin(muscle(x, quiet =TRUE)),BPPARAM=BPPARAM)
+    haps <- bplapply(ss,function(x)haplotype(x,strict=T),BPPARAM=BPPARAM)
+    hapind <- bplapply(haps, function(x)unlist(bplapply(attr(x,"index"),'[',1)),BPPARAM=BPPARAM)
     hapind <- sapply(names(hapind), function(x)seqname[[x]][hapind[[x]]],simplify = F)
-    hapnames <- lapply(haps, function(x)paste0(hapname,1:length(rownames(x))))
+    hapnames <- bplapply(haps, function(x)paste0(hapname,1:length(rownames(x))),BPPARAM=BPPARAM)
     hapfreq <-lapply(haps, function(x)as.integer(summary(x)))
     hapx <- lapply(haps, function(x)attr(x,"index"))
     haplist <- sapply(names(hapx), function(x).getlist(x,hapx,seqname,hapname),simplify = F)
@@ -198,10 +209,8 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
         unlist(gr[x][, c("REF","ALT", hapind[[x]])],
                use.names = F))
     hap <- sapply(names(hapgr), function(x).colnames.mcol(hapgr[[x]],
-                                    hapnames[[x]]))
+                                                          hapnames[[x]]))
     hap <- GRangesList(hap)
-    hapnet <- lapply(haps, function(x)haploNet(x))
-    #hapdist <- lapply(seqs, function(x)x@d)
     sequence <- sapply(names(hapind), function(x)
         sequence[[x]][hapind[[x]]])
     res <- new("SeqHap",
@@ -212,7 +221,6 @@ snp2hap <- function(pheno,grob,hapname='haplotype'){
                seqs = sequence,
                hapnames = hapnames,
                hapfreq = hapfreq,
-               hapnet = hapnet,
                haplist = haplist,
                upstream   = grob@upstream,
                downstream  = grob@downstream,

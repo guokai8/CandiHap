@@ -7,6 +7,8 @@
 preGranges(
   gr,
   gene = NULL,
+  chr = NULL,
+  region = NULL,
   exon = TRUE,
   cds = FALSE,
   gene_name = FALSE,
@@ -16,7 +18,11 @@ preGranges(
 \arguments{
 \item{gr}{GRanges object}
 
-\item{gene}{gene name}
+\item{gene}{gene name (set to NULL if specify the chromosome name and region)}
+
+\item{chr}{chromosome name}
+
+\item{region}{a vector include the start and the end location}
 
 \item{exon}{a logical value indicating whether use exon information or not}
 

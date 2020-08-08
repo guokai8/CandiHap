@@ -13,6 +13,8 @@ data(snp)
 gff <- snp$gff
 # gff <- importGFF("test.gff3",format="gff3")
 gr<-preGranges(gff,gene="Si9g49910",cds = T)
+##or use region
+# gr <- preGranges(gff,chr=9,region=c(54510843,54520843),cds=T)
 hmp <- snp$hmp
 ovl <- findover(gr,hmp)
 # hmp <- read_hmp("haplotypes.hmp")
@@ -20,6 +22,7 @@ ovl <- findover(gr,hmp)
 # hmp <- read_vcf('test.vcf')
 pheno <- snp$pheno
 # pheno <- read_pheno("Phenotype.txt",sep="\t")
+##support parallel now (cpus=4)
 hap <- snp2hap(pheno,ovl)
 ## want to extract results
 results(hap, gene="Si9g49910")

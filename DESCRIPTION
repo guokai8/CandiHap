@@ -1,7 +1,7 @@
 Package: CandiHap
 Type: Package
 Title: Build Haplotye and Generate Figures
-Version: 0.0.15
+Version: 0.0.16
 Author: Kai Guo, Xukai Li
 Maintainer: Kai Guo <guokai8@gmail.com>
 Description: build haplotye and generate figures
@@ -30,7 +30,8 @@ Imports:
     scales,
     grid,
     readr,
-    rtracklayer
+    rtracklayer,
+    BiocParallel
 Depends: R (>= 3.5.0)
 Suggests:
     knitr,
@@ -38,5 +39,5 @@ Suggests:
     rmarkdown
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 biocViews: DataRepresentation,GraphAndNetwork

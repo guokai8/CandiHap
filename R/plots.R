@@ -163,7 +163,7 @@ snboxplot <- function(hap, gene, feature){
     pheno <- subset(pheno,group%in%sel)
     colnames(pheno)[2]<-"feature"
     ptest <- tidy(TukeyHSD(aov(feature~group,data=pheno)))%>%
-        separate(comparison,c("group1","group2"),sep="-")
+        separate(contrast,c("group1","group2"),sep="-")
     ptest <- subset(ptest,adj.p.value < 0.05)
     if(nrow(ptest)<1){
         stop("No significant found!")

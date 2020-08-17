@@ -69,7 +69,7 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
                         upstream = 1000, downstream = 1000, alpha.point =0.75, point.size = 1, point.shape = 20,
                         exon = "darkgreen", utr3 = "cyan4", utr5 ="cyan4",intron = "black", gene.label.size = 0.5,
                         high = "cyan4", low ="lightblue", threshold.col="red",
-                        threshold.lwd = 1, threshold.lty = 1,
+                        threshold.lwd = 1, threshold.lty = 2,
                         ylab="-log10 (P value)", legend.lab = NULL,
                         ylab.size = 0.9, arrow.col ="lightblue",arrow.fill = "lightblue"){
     #extrack object

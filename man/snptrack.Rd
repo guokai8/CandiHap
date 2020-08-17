@@ -12,6 +12,7 @@ snptrack(
   chr = NULL,
   region = NULL,
   gene = NULL,
+  threshold = NULL,
   geneOnly = FALSE,
   exonOnly = FALSE,
   upstream = 1000,
@@ -26,6 +27,9 @@ snptrack(
   gene.label.size = 0.5,
   high = "cyan4",
   low = "lightblue",
+  threshold.col = "red",
+  threshold.lwd = 1,
+  threshold.lty = 1,
   ylab = "-log10 (P value)",
   legend.lab = NULL,
   ylab.size = 0.9,
@@ -45,6 +49,8 @@ snptrack(
 \item{region}{a vector include the start and the end location}
 
 \item{gene}{gene name}
+
+\item{threshold}{threshold to add the line}
 
 \item{geneOnly}{only show points in the gene region}
 
@@ -73,6 +79,12 @@ snptrack(
 \item{high}{legend color}
 
 \item{low}{low legend color}
+
+\item{threshold.col}{color for threshold line}
+
+\item{threshold.lwd}{line width for threshold line}
+
+\item{threshold.lty}{line type for threshold line}
 
 \item{ylab}{ylab name}
 

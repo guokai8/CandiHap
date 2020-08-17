@@ -38,6 +38,7 @@
 #' @param color color for the point
 #' @param chr chromosome name
 #' @param region a vector include the start and the end location
+#' @param allchr choose TRUE when displaying whole chromosome or large region
 #' @param gene gene name
 #' @param threshold threshold to add the line
 #' @param geneOnly only show points in the gene region
@@ -63,7 +64,7 @@
 #' @param arrow.fill arrow fill
 #' @export
 #' @author Kai Guo
-snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = NULL, gene = NULL,
+snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = NULL, allchr=FALSE,gene = NULL,
                         threshold = -log10(1e-6),
                         geneOnly = FALSE, exonOnly = FALSE,
                         upstream = 1000, downstream = 1000, alpha.point =0.75, point.size = 1, point.shape = 20,
@@ -141,10 +142,17 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     }
     ### layout
     grid.newpage()
-    pushViewport(viewport(layout = grid.layout(3,3,
+    if(isTRUE(allchr)){
+        pushViewport(viewport(layout = grid.layout(2,3,
+            widths =unit(c(1.5, 7, 1.5),
+            units = c("null","null","null")),
+            heights = unit(c(8.5,1.5),units =c("null","null")))))
+    }else{
+        pushViewport(viewport(layout = grid.layout(3,3,
             widths =unit(c(1.5, 7, 1.5),
             units = c("null","null","null")),
             heights = unit(c(5.5,4.5,0.5),units =c("null","null","null")))))
+    }
     # top part
     vp <- viewport(layout.pos.row = 1,layout.pos.col = 2, xscale = xscale, yscale =yscale,
                 height = unit(1, "npc"), width = unit(0.8, "npc"))
@@ -157,6 +165,17 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     grid.lines(x=xscale,y=threshold,default.units = "native",gp=gpar(col=threshold.col,lwd=threshold.lwd,lty=threshold.lty))
     # xyline<-xysmooth(start(dat),dat$scores,smooth = 5)
     # grid.lines(x = xyline$x, y = xyline$y, default.units = "native")
+    if(isTRUE(allchr)){
+        len <- end - start + 1
+        if(len > 50000){
+            xticklab <- paste0(round(grid.pretty(range = c(start, end))/1000000, 2), "Mb")
+        }else if(len > 5000 & len <= 50000){
+            xticklab <- paste0(round(grid.pretty(range = c(start, end))/1000, 2), "Kb")
+        }else{
+            xticklab <- grid.pretty(range = c(start, end))
+        }
+        grid.xaxis(at = grid.pretty(range = c(start,end)),label = xticklab)
+    }
     grid.lines(x = c(0, 1), y = 0, default.units = "npc")
     grid.yaxis(name="ya")
     grid.text(label = ylab, x = - unit(2.5, "lines"), y = unit(max(yscale)*0.7, "native"), just="bottom", rot = 90,name="ytext",gpar(cex=ylab.size))
@@ -174,8 +193,10 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     grid.text(x = 0.2, y = 0.7, default.units = "npc", label = legend.lab, gp = gpar(cex = 1), rot = 90)
     popViewport()
     popViewport()
+    #####################################################
     ## gene structure
     ## modify from trackViewer plotGeneTrack function
+    if(isFALSE(allchr)){
     vp <- viewport(layout.pos.row = 2,layout.pos.col = 2, xscale = xscale, y=0, height = 1,width = 0.8)
     pushViewport(vp)
     vp2 <- viewport(xscale = xscale, y=unit(0.6, "npc"),height = unit(0.8, "npc"))
@@ -347,6 +368,7 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     }
     popViewport()
     popViewport()
+    }
     grid.clip()
     return(invisible())
 }

@@ -39,6 +39,7 @@
 #' @param chr chromosome name
 #' @param region a vector include the start and the end location
 #' @param gene gene name
+#' @param threshold threshold to add the line
 #' @param geneOnly only show points in the gene region
 #' @param exonOnly only show points in the exon region
 #' @param upstream upstream bp
@@ -53,6 +54,9 @@
 #' @param gene.label.size size of the gene label
 #' @param high legend color
 #' @param low low legend color
+#' @param threshold.col color for threshold line
+#' @param threshold.lwd line width for threshold line
+#' @param threshold.lty line type for threshold line
 #' @param ylab ylab name
 #' @param ylab.size ylab size
 #' @param arrow.col arrow color
@@ -60,10 +64,13 @@
 #' @export
 #' @author Kai Guo
 snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = NULL, gene = NULL,
+                        threshold = -log10(1e-6),
                         geneOnly = FALSE, exonOnly = FALSE,
                         upstream = 1000, downstream = 1000, alpha.point =0.75, point.size = 1, point.shape = 20,
                         exon = "darkgreen", utr3 = "cyan4", utr5 ="cyan4",intron = "black", gene.label.size = 0.5,
-                        high = "cyan4", low ="lightblue", ylab="-log10 (P value)", legend.lab = NULL,
+                        high = "cyan4", low ="lightblue", threshold.col="red",
+                        threshold.lwd = 1, threshold.lty = 1,
+                        ylab="-log10 (P value)", legend.lab = NULL,
                         ylab.size = 0.9, arrow.col ="lightblue",arrow.fill = "lightblue"){
     #extrack object
     if(length(intersect(id,GFF3_COLNAMES))==0){
@@ -147,6 +154,7 @@ snptrack <- function(obj, dat, id = "gene_id", color=NULL, chr = NULL, region = 
     ## points
     grid.points(x = start(dat), y = md$scores, default.units = "native", pch = point.shape, gp=gpar(col = mycol, alpha = alpha.point, cex = point.size))
     # add lines
+    grid.lines(x=xscale,y=threshold,default.units = "native",gp=gpar(col=threshold.col,lwd=threshold.lwd,lty=threshold.lty))
     # xyline<-xysmooth(start(dat),dat$scores,smooth = 5)
     # grid.lines(x = xyline$x, y = xyline$y, default.units = "native")
     grid.lines(x = c(0, 1), y = 0, default.units = "npc")

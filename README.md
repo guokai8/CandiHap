@@ -40,6 +40,8 @@ dat=snp$dat
 # notice that the dat should have the chromosome name in the first column, position in the second column and the values in the following columns 
 # dat <- read_data(file,sep="\t")
 snptrack(gff,dat=dat,id="Parent")
+# don't show the genes
+#snptrack(gff,dat=dat,id="Parent",allchr=TRUE)
 ## id is the gene name you want to display, in gff3 file should be 'Parent'
 #show snp locate in gene only
 snptrack(gff,dat=dat,id="Parent",geneOnly=T)

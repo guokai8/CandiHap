@@ -11,8 +11,9 @@ snptrack(
   color = NULL,
   chr = NULL,
   region = NULL,
+  allchr = FALSE,
   gene = NULL,
-  threshold = NULL,
+  threshold = -log10(1e-06),
   geneOnly = FALSE,
   exonOnly = FALSE,
   upstream = 1000,
@@ -29,7 +30,7 @@ snptrack(
   low = "lightblue",
   threshold.col = "red",
   threshold.lwd = 1,
-  threshold.lty = 1,
+  threshold.lty = 2,
   ylab = "-log10 (P value)",
   legend.lab = NULL,
   ylab.size = 0.9,
@@ -47,6 +48,8 @@ snptrack(
 \item{chr}{chromosome name}
 
 \item{region}{a vector include the start and the end location}
+
+\item{allchr}{choose TRUE when displaying whole chromosome or large region}
 
 \item{gene}{gene name}
 

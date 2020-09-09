@@ -28,6 +28,8 @@ Imports:
     trackViewer,
     S4Vectors,
     scales,
+    ggrepel,
+    tibble,
     grid,
     readr,
     rtracklayer,

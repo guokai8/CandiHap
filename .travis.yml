@@ -17,10 +17,6 @@ matrix:
     - os: osx
       r_check_args: '--ignore-vignettes'
       r_build_args: '--no-build-vignettes'
-    - dist: trusty
+    - dist: linux
       r_check_args: '--ignore-vignettes'
       r_build_args: '--no-build-vignettes'
-
-addons:
-  apt:
-    update: true

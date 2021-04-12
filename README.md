@@ -56,3 +56,8 @@ snptrack(gff,dat=dat,id="Parent",gene='Si9g49910')
 #change name, etc ...
 ?snptrack
 ```
+
+
+## 5. Contact information
+For any questions please contact guokai8@gmail.com or submit the issues to https://github.com/guokai8/CandiHap/issues
+

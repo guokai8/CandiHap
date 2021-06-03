@@ -1,6 +1,7 @@
 # CandiHap
-<a href="https://travis-ci.org/guokai8/CandiHap"><img src="https://travis-ci.org/guokai8/CandiHap.svg" alt="Build status"></a>
-[![](https://img.shields.io/badge/devel%20version-0.0.18-green.svg)](https://github.com/guokai8/CandiHap) ![](https://img.shields.io/github/languages/code-size/guokai8/CandiHap)
+[![](https://img.shields.io/badge/devel%20version-0.0.18-green.svg)](https://github.com/guokai8/CandiHap) ![](https://img.shields.io/github/languages/code-size/guokai8/CandiHap)[![DOI](https://zenodo.org/badge/258687525.svg)](https://zenodo.org/badge/latestdoi/258687525)
+
+
 ## Install
 ```
 library(devtools)

@@ -12,6 +12,7 @@ Imports:
     pegas,
     muscle,
     ape,
+    sf,
     rlang,
     tools,
     ggplot2,

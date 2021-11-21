@@ -176,6 +176,7 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 #' @importFrom GenomicRanges GRangesList
 #' @importFrom BiocParallel bplapply
 #' @importFrom BiocParallel MulticoreParam
+#' @importFrom BiocParallel SnowParam
 #' @param pheno phenotype data
 #' @param grob GRanges of overlap results
 #' @param hapname haplotype name
@@ -186,7 +187,12 @@ findover <- function(gr, hmp, upstream = 2000, downstream = 500){
 snp2hap <- function(pheno,grob,hapname='haplotype',cpus=1){
     gr <-grob@overlap
     colnames(pheno)[1] <- 'sample'
-    BPPARAM = MulticoreParam(cpus)
+    #BPPARAM = MulticoreParam(cpus)
+    if (.Platform$OS.type=="windows") {
+        BPPARAM <- BiocParallel::SnowParam(cpus,type="SOCK")
+        } else {
+        BPPARAM <- BiocParallel::MulticoreParam(cpus)
+    }
     sequence <- bplapply(gr, function(x)as.data.frame(mcols(x)[,pheno$sample]),BPPARAM=BPPARAM)
     sequence <- bplapply(sequence, function(x)
         DNAStringSet(.unlist.name(sapply(x,function(y)snp2fasta(y)))),BPPARAM=BPPARAM)

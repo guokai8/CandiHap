@@ -34,7 +34,7 @@ GENE_FEATURE <- c(.EXON_TYPES,.CDS_TYPES,.UTR_TYPES,.STOP_CODON_TYPES)
 #' modified based on GenomicFeatures .detect_file_format function
 #' @importFrom tools file_ext
 #' @importFrom tools file_path_sans_ext
-#' @importFrom rtracklayer FileForFormat
+#' @importFrom rtracklayer fileFormat
 .detect_file <- function(file)
 {
     if (isSingleString(file)) {
